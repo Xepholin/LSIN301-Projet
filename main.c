@@ -19,14 +19,16 @@ int nombre_caract(char **argv) {
 
 int main(int argc, char **argv) {
 	FILE * livre = NULL;
-	int compt = nombre_caract(argv);
+	int nbc = nombre_caract(argv);
 
 	livre = fopen(argv[1], "r");
 
-	DICO dico = creer_dico(argv, compt, livre);
-	affiche_dico(dico, compt);
+	DICO dico = creer_dico(argv, nbc, livre);
+	affiche_dico(dico, nbc);
+		
+	printf("\n");
 
-	printf("%d \n", compt);
+	printf("%d \n", nbc);
 
 	return 0;
 }

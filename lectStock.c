@@ -5,14 +5,21 @@
 #include "lectStock.h"
 
 DICO creer_dico(char **argv, int n, FILE *texte) {
+    int j = 1;
     DICO dico = malloc(sizeof(struct dico));
     dico->T = malloc(n * sizeof(char));
     dico->L = malloc(n * sizeof(int));
 
+    dico->L[j] = j;
+
     for (int i = 0; i < n; i++) {
         fscanf(texte, "%c", &dico->T[i]);
+        if (dico->T[i] == '\n') {
+            dico->L[j] = j;
+            j++;
+        }
     }
-
+    
     return dico;
 }
 
