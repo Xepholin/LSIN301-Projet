@@ -6,7 +6,7 @@ HSRC = *.h
 OBJS = main.o lectStock.o
 
 run: dico
-	./dico pg31469.txt
+	./dico fichier.txt
 
 dico : $(OBJS)
 	$(CC) -o $@ $^
@@ -15,7 +15,7 @@ dico : $(OBJS)
 	$(CC) $(CFLAGS) $<
 	
 valgrind: dico
-	valgrind ./dico
+	valgrind ./dico fichier.txt
 
 
 clean:

@@ -1,4 +1,4 @@
-DICO creer_dico(char **argv, int n, FILE *texte);
+DICO creer_dico(char **argv, int n);
 
 void affiche_dico(DICO dico, int n);
 

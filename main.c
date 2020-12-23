@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "constantes.h"
 #include "lectStock.h"
+#include "ABR.h"
 
 int nombre_caract(char **argv) {
 	FILE * texte = NULL;
@@ -16,19 +17,28 @@ int nombre_caract(char **argv) {
 	return compt;
 }
 
+/*int nombre_ligne(char **argv) {
+	FILE * texte = NULL;
+	texte = fopen(argv[1], "r");
+	int compt = 0;
+
+	while (fgetc(texte) != EOF) {
+		if (fgetc(texte) == '\n') {
+			compt++;
+		}
+	}
+	fclose(texte);
+	return compt;
+}*/
+
 
 int main(int argc, char **argv) {
-	FILE * livre = NULL;
 	int nbc = nombre_caract(argv);
 
-	livre = fopen(argv[1], "r");
-
-	DICO dico = creer_dico(argv, nbc, livre);
+	DICO dico = creer_dico(argv, nbc);
 	affiche_dico(dico, nbc);
-		
-	printf("\n");
-
 	printf("%d \n", nbc);
 
+	liberer_fichier(dico);
 	return 0;
 }
