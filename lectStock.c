@@ -20,6 +20,7 @@ void affiche_dico(DICO dico, int n) {
     for (int i = 0; i < n; i++) {
         printf("%c", dico->T[i]);
     }
+    printf("\n");
 }
 
 void liberer_fichier(DICO dico) {

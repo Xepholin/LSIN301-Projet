@@ -6,7 +6,7 @@ HSRC = *.h
 OBJS = main.o lectStock.o
 
 run: dico
-	./dico fichier.txt
+	./dico pg31469.txt
 
 dico : $(OBJS)
 	$(CC) -o $@ $^
