@@ -18,7 +18,6 @@ int nombre_caract(char **argv) {
 
 
 int main(int argc, char **argv) {
-	int j;
 	FILE * livre = NULL;
 	int nbc = nombre_caract(argv);
 
