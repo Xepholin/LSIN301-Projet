@@ -5,13 +5,14 @@
 #include "lectStock.h"
 
 DICO creer_dico(char **argv, int n) {
-    FILE * texte = NULL;
-    texte = fopen(argv[1], "r");
-    int j = 0;
-
     DICO dico = malloc(sizeof(struct dico));
     dico->T = malloc(n * sizeof(char));
     dico->L = malloc(n * sizeof(int));
+
+    FILE * texte = NULL;
+    texte = fopen(argv[1], "r");
+    int j = 0;
+    dico->taille = n;
 
     if (texte != NULL) {
         for (int i = 0; i < n; i++) {
@@ -29,11 +30,11 @@ DICO creer_dico(char **argv, int n) {
     return dico;
 }
 
-void affiche_dico(DICO dico, int n) {
-    for (int i = 0; i < n; i++) {
+void affiche_dico(DICO dico) {
+    for (int i = 0; i < dico->taille; i++) {
         printf("%c", dico->T[i]);
     }
-    
+
     printf("\n");
 }
 

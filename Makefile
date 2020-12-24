@@ -3,7 +3,7 @@ CFLAGS = -c -Wall
 LDFLAGS = -lm
 CSRC = *.c
 HSRC = *.h
-OBJS = main.o lectStock.o
+OBJS = main.o lectStock.o ABR.o
 
 run: dico
 	./dico fichier.txt
