@@ -14,6 +14,7 @@ int nombre_caract(char **argv) {
 	while (fgetc(texte) != EOF) {
 		compt++;
 	}
+
 	fclose(texte);
 	return compt;
 }
@@ -24,6 +25,8 @@ int main(int argc, char **argv) {
 
 	ABR abr = creer_ARB(dico->T, dico->taille);
 	affiche_ABR(abr);
+
+	est_ABR(abr);
 
 	liberer_ABR(abr);
 	liberer_fichier(dico);

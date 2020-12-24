@@ -6,6 +6,7 @@
 #include "ABR.h"
 
 bool vide(ABR a) {
+
     if (a->mot == NULL) {
         return true;
     }
@@ -15,7 +16,9 @@ bool vide(ABR a) {
 }
 
 void ajoute_element(ABR a, char x) {
+
     if (a->taille < TAILLE_MAX) {
+
         if (!vide(a)) {
             a->mot[a->taille] = x;
             a->taille++;
@@ -32,25 +35,48 @@ ABR creer_ARB(char *tab, int n) {
         ajoute_element(a, tab[i]);
     }
 
+    double_espace(a, n);
+
+    return a;
+}
+
+void double_espace(ABR a, int n) {
 	for (int i = 0; i < n; i++) {
+
+        if ((int)a->mot[i] == '\n') {
+            a->mot[i] = ' ';
+            double_espace(a, n);
+        }
+        
 		if ((int)a->mot[i] == ' ' && (int)a->mot[i+1] == ' ') {
 			for (int j = i; j < n; j++) {
 				a->mot[j] = a->mot[j+1];
 			}
 		}
 	}
-
-    return a;
 }
 
 void est_ABR(ABR a) {
-    
+    int motLePlusLong = 195;
+    //char motActu[motLePlusLong];
+
+    for (int i = 0; i < motLePlusLong; i++) {
+        if ((int)a->mot[i] == ' ') {
+            printf(".");
+        }
+    }
+
+    /*for (int i = 0; i < motLePlusLong; i++) {
+        printf("%c", motActu[i]);
+    }*/
 }
 
 void affiche_ABR(ABR a) {
+
     for (int i = 0; i < a->taille; i++) {
         printf("%c", a->mot[i]);
     }
+
     printf("\n");
 }
 
