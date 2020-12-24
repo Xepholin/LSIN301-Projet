@@ -14,7 +14,7 @@ void ajoute_element(ABR a, char x);
 
 ABR creer_ARB(char *tab, int n);
 
-void double_espace(ABR a, int n);
+void double_espace(ABR a);
 
 void est_ABR(ABR a);
 
