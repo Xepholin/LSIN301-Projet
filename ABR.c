@@ -21,6 +21,11 @@ void ajoute_element(ABR a, char x) {
 
         if (!vide(a)) {
             a->mot[a->taille] = x;
+
+            if ((int)a->mot[a->taille] == '\n') {
+                a->mot[a->taille] = ' ';
+            }
+            
             a->taille++;
         }
     }
@@ -28,19 +33,17 @@ void ajoute_element(ABR a, char x) {
 
 ABR creer_ARB(char *tab, int n) {
     ABR a = malloc(sizeof(struct abr));
-    a->taille = 0;
     a->mot = malloc(TAILLE_MAX * sizeof(char));
-
+    a->taille = 0;
+    
     for (int i = 0; i < n; i++) {
         ajoute_element(a, tab[i]);
     }
 
-    double_espace(a);
-
     return a;
 }
 
-void double_espace(ABR a) {
+/*void double_espace(ABR a) {
 	for (int i = 0; i < a->taille; i++) {
 
         if ((int)a->mot[i] == '\n') {
@@ -54,25 +57,38 @@ void double_espace(ABR a) {
 			}
 		}
 	}
+}*/
+
+motAct estMot(ABR a, int pos) {
+    
+    int motLePlusLong = 50;
+    motAct motActu = malloc(sizeof(struct motActuel));
+    motActu->mot = malloc(motLePlusLong * sizeof(char));
+
+    while (pos <= motLePlusLong) {
+    
+        if ((int)a->mot[pos] == ' ') {
+            pos++;
+        }
+        else {
+            motActu->mot[pos] = a->mot[pos];
+            pos++;
+        }
+        
+        if ((int)a->mot[pos] == ' ' && motActu->mot[pos-1] >= 65) {
+            break;
+        }
+    }
+
+    return motActu;
+
+    free(motActu);
 }
 
 void est_ABR(ABR a) {
+    //int pos = 0;
+    //motAct motActu = estMot(a, pos);
     
-    int motLePlusLong = 195;
-    char *motActu = malloc(motLePlusLong * sizeof(char));
-    int i = 0;
-
-    while ((int)a->mot[i] != ' ') {
-        motActu[i] = a->mot[i];
-        i++;
-    }
-
-    for (int i = 0; i < motLePlusLong; i++) {
-        printf("%c", motActu[i]);
-    }
-
-    free(motActu);
-    printf("\n");
 }
 
 void affiche_ABR(ABR a) {

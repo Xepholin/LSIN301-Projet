@@ -9,7 +9,7 @@ run: dico
 	./dico fichier.txt
 
 dico : $(OBJS)
-	$(CC) -o $@ $^
+	$(CC) -g -o $@ $^
 	
 %.o: %.c
 	$(CC) $(CFLAGS) $<

@@ -24,9 +24,7 @@ int main(int argc, char **argv) {
 	DICO dico = creer_dico(argv, nbc);
 
 	ABR abr = creer_ARB(dico->T, dico->taille);
-	affiche_ABR(abr);
-
-	est_ABR(abr);
+	//affiche_ABR(abr);
 
 	liberer_ABR(abr);
 	liberer_fichier(dico);
