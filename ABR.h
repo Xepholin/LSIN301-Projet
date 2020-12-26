@@ -8,15 +8,9 @@ struct abr {
 
 typedef struct abr *ABR;
 
-struct motActuel
-{
-    char *mot;
-    int pos;
-};
-
-typedef struct motActuel *motAct;
-
 bool vide(ABR a);
+
+MOT estMot(DICO texte, int position);
 
 void ajoute_element(ABR a, char x);
 
@@ -24,11 +18,11 @@ ABR creer_ARB(char *tab, int n);
 
 void double_espace(ABR a);
 
-motAct estMot(ABR a, int pos);
-
-void est_ABR(ABR a);
+void est_ABR(ABR a, MOT motActu);
 
 void affiche_ABR(ABR a);
+
+void liberer_mot(MOT mot);
 
 void liberer_ABR(ABR a);
 

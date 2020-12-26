@@ -1,9 +1,1 @@
-  Salut
-a lul
-b  mmmh
-c  truc
-d pop
-e
-f
-
-g  nul
+  Salut a lul b  mmmh c  truc d pop e f g  nul

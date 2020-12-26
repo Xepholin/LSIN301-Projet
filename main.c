@@ -21,12 +21,17 @@ int nombre_caract(char **argv) {
 
 int main(int argc, char **argv) {
 	int nbc = nombre_caract(argv);
+	int position = 0;
 	DICO dico = creer_dico(argv, nbc);
 
-	ABR abr = creer_ARB(dico->T, dico->taille);
-	//affiche_ABR(abr);
+	MOT mot = estMot(dico, position);
 
-	liberer_ABR(abr);
+	for (int i = 0; i < mot->taille; i++) {
+		printf("%c", mot->mot[i]);
+	}
+	printf("\n");
+
+	liberer_mot(mot);
 	liberer_fichier(dico);
 	return 0;
 }
