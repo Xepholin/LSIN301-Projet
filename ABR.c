@@ -30,18 +30,34 @@ MOT estMot(DICO texte, int position) {
         }
         else {
             motActu->mot[motActu->taille] = texte->T[motActu->position];
-            //printf("%c\n", motActu->mot[motActu->taille]);
             motActu->position++;
             motActu->taille++;
         }
         
         if (texte->T[motActu->position] == ' ' && texte->T[motActu->position-1] >= 65) {
-            printf("break à %d\nlettre = %c\n", motActu->position, texte->T[motActu->position-1]);
             break;
         }
     }
 
     return motActu;
+}
+
+void ajoute_element(ABR a, MOT mot, DICO dico) {
+    mot = estMot(dico, mot->position);
+    int pos;
+    if (a->taille < TAILLE_MAX) {
+        if (!vide(a)) {
+            for (int i = 0; i < mot->taille; i++) {
+                a->mot[a->taille] = mot->mot[i];
+                pos = a->taille;
+                a->taille++;
+            }
+            
+            a->mot[a->taille+1] = ' ';
+
+            while (pos > 0 && a->mot[pos] )
+        }
+    }
 }
 
 void affiche_ABR(ABR a) {
