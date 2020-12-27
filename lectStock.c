@@ -14,7 +14,7 @@ DICO creer_dico(char **argv, int n) {
     int j = 0;
     dico->taille = n;
 
-    if (texte != NULL) {
+    if (texte != NULL)  {
 
         for (int i = 0; i < n; i++) {
             fscanf(texte, "%c", &dico->T[i]);
@@ -31,9 +31,9 @@ DICO creer_dico(char **argv, int n) {
     return dico;
 }
 
-void affiche_dico(DICO dico) {
+void affiche_dico(DICO dico)    {
     
-    for (int i = 0; i < dico->taille; i++) {
+    for (int i = 0; i < dico->taille; i++)  {
         printf("%c", dico->T[i]);
     }
 

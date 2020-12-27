@@ -6,12 +6,12 @@
 #include "lectStock.h"
 #include "ABR.h"
 
-int nombre_caract(char **argv) {
+int nombre_caract(char **argv)	{
 	FILE * texte = NULL;
 	texte = fopen(argv[1], "r");
 	int compt = 0;
 
-	while (fgetc(texte) != EOF) {
+	while (fgetc(texte) != EOF)	{
 		compt++;
 	}
 
@@ -19,17 +19,10 @@ int nombre_caract(char **argv) {
 	return compt;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
-	int position = 0;
 	DICO dico = creer_dico(argv, nbc);
 
-	MOT mot = estMot(dico, position);
-
-	for (int i = 0; i < mot->taille; i++) {
-		printf("%c", mot->mot[i]);
-	}
-	printf("\n");
 
 	liberer_mot(mot);
 	liberer_fichier(dico);

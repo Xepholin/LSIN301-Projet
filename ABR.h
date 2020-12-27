@@ -10,11 +10,11 @@ typedef struct abr *ABR;
 
 bool vide(ABR a);
 
-MOT estMot(DICO texte, int position);
+MOT estMot(DICO texte);
 
 void ajoute_element(ABR a, MOT mot, DICO dico);
 
-ABR creer_ARB(char *tab, int n);
+ABR creer_ARB(DICO dico);
 
 void double_espace(ABR a);
 

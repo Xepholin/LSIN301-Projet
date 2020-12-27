@@ -1,7 +1,7 @@
 #define TAILLE_MAX 100000
+#define MOT_LE_PLUS_LONG 50
 
-struct mot
-{
+struct mot  {
     char *mot;
     int taille;
     int position;
@@ -10,4 +10,4 @@ struct mot
 
 typedef struct mot *MOT;
 
-void transpo(char *lettre);
+void transpo(char lettre);
