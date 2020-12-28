@@ -10,7 +10,7 @@ typedef struct abr *ABR;
 
 bool vide(ABR a);
 
-MOT estMot(DICO texte);
+MOT estMot(DICO texte, MOT motActu);
 
 void ajoute_element(ABR a, MOT mot, DICO dico);
 

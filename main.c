@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "constantes.h"
 #include "lectStock.h"
 #include "ABR.h"
@@ -23,8 +24,11 @@ int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
 
+	ABR arbre = creer_ARB(dico);
 
-	liberer_mot(mot);
+	affiche_ABR(arbre->filsD);
+
+	liberer_ABR(arbre);
 	liberer_fichier(dico);
 	return 0;
 }

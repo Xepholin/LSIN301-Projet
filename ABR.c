@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "constantes.h"
 #include "lectStock.h"
 #include "ABR.h"
@@ -16,8 +17,7 @@ bool vide(ABR a)    {
     }
 }
 
-MOT estMot(DICO texte)  {
-    MOT motActu = malloc(sizeof(struct mot));
+MOT estMot(DICO texte, MOT motActu)  {
     motActu->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
     motActu->taille = 0;
 
@@ -45,17 +45,21 @@ void ajoute_element(ABR a, MOT mot, DICO dico)  {
         if (!vide(a))   {
 
             for (int i = 0; i < mot->taille; i++)   {
-                transpo(a->mot[i]);
+                mot->mot[i] = tolower(mot->mot[i]);
 
                 if (mot->mot[i] < a->mot[i])    {
 
                     a->filsG = malloc(sizeof(struct abr));
                     a->filsG->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
+                    printf("mot ajouté filsG = ");
 
                     for (int i = 0; i < mot->taille; i++)   {
                         a->filsG->mot[i] = mot->mot[i];
                         a->taille++;
+                        printf("%c", a->filsG->mot[i]);
                     }
+                    printf("à la position = %d", mot->position);
+                    printf("\n");
                     a->mot = a->filsG->mot;
                     break;
                 }
@@ -63,12 +67,16 @@ void ajoute_element(ABR a, MOT mot, DICO dico)  {
                 if (mot->mot[i] > a->mot[i])    {
                     a->filsD = malloc(sizeof(struct abr));
                     a->filsD->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
+                    printf("mot ajouté filsD = ");
 
                     for (int i = 0; i < mot->taille; i++)   {
                         a->filsD->mot[i] = mot->mot[i];
                         a->taille++;
+                        printf("%c", a->filsD->mot[i]);
                     }
                     a->mot = a->filsD->mot;
+                    printf(" à la position = %d", mot->position);
+                    printf("\n");
                     break;
                 }
             }
@@ -81,13 +89,18 @@ void ajoute_element(ABR a, MOT mot, DICO dico)  {
 
 ABR creer_ARB(DICO dico) {
     ABR a = malloc(sizeof(struct abr));
+    MOT mot = malloc(sizeof(struct mot));
+    mot->position = 0;
     a->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-    a->taille = 0;
+    a->taille = 1;
     
-    for (int i = 0; i < TAILLE_MAX; i++) {
-        MOT mot = estMot(dico);
+    for (int i = 0; i < a->taille; i++) {
+        mot = estMot(dico, mot);
         ajoute_element(a, mot, dico);
+        free(mot->mot);
     }
+
+    free(mot);
 
     return a;
 }
@@ -102,7 +115,6 @@ void affiche_ABR(ABR a) {
 }
 
 void liberer_mot(MOT mot)   {
-    free(mot->mot);
     free(mot);
 }
 
