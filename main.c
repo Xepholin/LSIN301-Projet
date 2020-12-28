@@ -23,12 +23,18 @@ int nombre_caract(char **argv)	{
 int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
+	MOT mot = malloc(sizeof(struct mot));
+	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
+	ABR a = creer_arbre(dico, mot, NULL, NULL);
+	mot->position = 0;
 
-	ABR arbre = creer_ARB(dico);
+	for(int i = 0; i < dico->taille; i++)	{
+		a = ajoute_element(a, mot, dico);
+	}
+	affiche_arbre(a);
 
-	affiche_ABR(arbre->filsD);
-
-	liberer_ABR(arbre);
+	free(mot);
+	liberer_ABR(a);
 	liberer_fichier(dico);
 	return 0;
 }

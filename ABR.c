@@ -9,7 +9,7 @@
 
 bool vide(ABR a)    {
 
-    if (a->mot == NULL)  {
+    if (a == NULL)  {
         return true;
     }
     else    {
@@ -40,84 +40,67 @@ MOT estMot(DICO texte, MOT motActu)  {
     return motActu;
 }
 
-void ajoute_element(ABR a, MOT mot, DICO dico)  {
-    if (a->taille < TAILLE_MAX) {
-        if (!vide(a))   {
-
-            for (int i = 0; i < mot->taille; i++)   {
-                mot->mot[i] = tolower(mot->mot[i]);
-
-                if (mot->mot[i] < a->mot[i])    {
-
-                    a->filsG = malloc(sizeof(struct abr));
-                    a->filsG->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-                    printf("mot ajouté filsG = ");
-
-                    for (int i = 0; i < mot->taille; i++)   {
-                        a->filsG->mot[i] = mot->mot[i];
-                        a->taille++;
-                        printf("%c", a->filsG->mot[i]);
-                    }
-                    printf("à la position = %d", mot->position);
-                    printf("\n");
-                    a->mot = a->filsG->mot;
-                    break;
-                }
-
-                if (mot->mot[i] > a->mot[i])    {
-                    a->filsD = malloc(sizeof(struct abr));
-                    a->filsD->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-                    printf("mot ajouté filsD = ");
-
-                    for (int i = 0; i < mot->taille; i++)   {
-                        a->filsD->mot[i] = mot->mot[i];
-                        a->taille++;
-                        printf("%c", a->filsD->mot[i]);
-                    }
-                    a->mot = a->filsD->mot;
-                    printf(" à la position = %d", mot->position);
-                    printf("\n");
-                    break;
-                }
-            }
-        }
-        else    {
-            printf("L'arbre est vide \n");
-        }
-    }
-}
-
-ABR creer_ARB(DICO dico) {
-    ABR a = malloc(sizeof(struct abr));
-    MOT mot = malloc(sizeof(struct mot));
-    mot->position = 0;
-    a->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-    a->taille = 1;
-    
-    for (int i = 0; i < a->taille; i++) {
-        mot = estMot(dico, mot);
-        ajoute_element(a, mot, dico);
-        free(mot->mot);
-    }
-
-    free(mot);
-
+ABR creer_arbre(DICO texte, MOT mot, ABR filsG, ABR filsD)    {
+    ABR a = malloc(sizeof(struct noeud));
+    a->mot = malloc(mot->taille * sizeof(char));
+    a->filsD = filsD;
+    a->filsG = filsG;
+    a->mot->mot = mot->mot;
+    free(mot->mot);
     return a;
 }
 
-void affiche_ABR(ABR a) {
+void affiche_noeud(ABR a) {
+    if (!vide(a))   {
+        affiche_noeud(a->filsG);
+        if(!vide(a->filsG)) {
+            printf("|");
+        }
 
-    for (int i = 0; i < a->taille; i++) {
-        printf("%c", a->mot[i]);
+        printf("%s", a->mot->mot);
+
+        if (!vide(a->filsD)) {
+            printf("|");
+        }
+        affiche_noeud(a->filsD);
     }
+}
 
+void affiche_arbre(ABR a)   {
+    affiche_noeud(a);
     printf("\n");
 }
 
-void liberer_mot(MOT mot)   {
-    free(mot);
+ABR ajoute_element(ABR a, MOT mot, DICO texte)    {
+    if (vide(a))    {
+        return creer_arbre(texte, mot, NULL, NULL);
+    }
+    else    {
+        mot = estMot(texte, mot);
+
+        for (int i = 0; i < mot->taille; i++)  {
+            mot->mot[i] = tolower(mot->mot[i]);
+        }
+
+        if (mot->mot == a->mot->mot)    {
+            a->mot->nbOcurrence++;
+        }
+
+        if (mot->mot < a->mot->mot) {
+            a->filsG = ajoute_element(a->filsG, mot, texte);
+        }
+        else    {
+            a->filsD = ajoute_element(a->filsD, mot, texte);
+        }
+        return a;
+    }
 }
 
 void liberer_ABR(ABR a) {
+    if (vide(a))    {
+        return;
+    }
+    liberer_ABR(a->filsD);
+    liberer_ABR(a->filsG);
     free(a);
 }

@@ -1,28 +1,19 @@
-struct abr {
-    char *mot;
-    int *ligne;
-    int taille;
-    struct abr *filsG;
-    struct abr *filsD;
+struct noeud {
+    MOT mot;
+    struct noeud *filsG;
+    struct noeud *filsD;
 };
 
-typedef struct abr *ABR;
+typedef struct noeud *ABR;
 
 bool vide(ABR a);
 
-MOT estMot(DICO texte, MOT motActu);
+ABR creer_arbre(DICO texte, MOT mot, ABR filsG, ABR filsD);
 
-void ajoute_element(ABR a, MOT mot, DICO dico);
+void affiche_noeud(ABR a);
 
-ABR creer_ARB(DICO dico);
+void affiche_arbre(ABR a);
 
-void double_espace(ABR a);
-
-void est_ABR(ABR a, MOT motActu);
-
-void affiche_ABR(ABR a);
-
-void liberer_mot(MOT mot);
+ABR ajoute_element(ABR a, MOT mot, DICO texte);
 
 void liberer_ABR(ABR a);
-
