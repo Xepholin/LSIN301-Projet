@@ -24,17 +24,40 @@ int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
 	MOT mot = malloc(sizeof(struct mot));
+	
+	int pos = 0;
+
 	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-	ABR a = creer_arbre(dico, mot, NULL, NULL);
-	mot->position = 0;
+	mot->taille = 0;
 
-	for(int i = 0; i < dico->taille; i++)	{
-		a = ajoute_element(a, mot, dico);
+    while (pos < dico->taille)   {
+    
+        if (dico->T[pos] == ' ') {
+            pos++;
+        }
+        else    {
+            mot->mot[mot->taille] = dico->T[pos];
+            pos++;
+            mot->taille++;
+        }
+        
+        if (dico->T[pos] == ' ' && dico->T[pos-1] >= 65)  {
+            break;
+        }
+    }
+
+	for (int i = 0; i < mot->taille; i++)	{
+		printf("%c", mot->mot[i]);
 	}
-	affiche_arbre(a);
+	printf("\n");
+	
+	//ARBRE a = creer_arbre(dico, mot, NULL, NULL, pos);
 
+	//affiche_arbre(a);
+
+	free(mot->mot);
 	free(mot);
-	liberer_ABR(a);
+	//liberer_arbre(a);
 	liberer_fichier(dico);
 	return 0;
 }

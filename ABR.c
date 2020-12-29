@@ -7,9 +7,9 @@
 #include "lectStock.h"
 #include "ABR.h"
 
-bool vide(ABR a)    {
+bool vide(ARBRE arbre)    {
 
-    if (a == NULL)  {
+    if (arbre == NULL)  {
         return true;
     }
     else    {
@@ -17,90 +17,87 @@ bool vide(ABR a)    {
     }
 }
 
-MOT estMot(DICO texte, MOT motActu)  {
+void recupMot(DICO texte, MOT motActu, int position)  {
     motActu->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-    motActu->taille = 0;
 
-    while (motActu->position < texte->taille)   {
+    while (position < texte->taille)   {
     
-        if (texte->T[motActu->position] == ' ') {
-            motActu->position++;
+        if (texte->T[position] == ' ') {
+            position++;
         }
         else    {
-            motActu->mot[motActu->taille] = texte->T[motActu->position];
-            motActu->position++;
+            motActu->mot[motActu->taille] = texte->T[position];
+            position++;
             motActu->taille++;
         }
         
-        if (texte->T[motActu->position] == ' ' && texte->T[motActu->position-1] >= 65)  {
+        if (texte->T[position] == ' ' && texte->T[position-1] >= 65)  {
             break;
         }
     }
-
-    return motActu;
 }
 
-ABR creer_arbre(DICO texte, MOT mot, ABR filsG, ABR filsD)    {
-    ABR a = malloc(sizeof(struct noeud));
-    a->mot = malloc(mot->taille * sizeof(char));
-    a->filsD = filsD;
-    a->filsG = filsG;
-    a->mot->mot = mot->mot;
-    free(mot->mot);
-    return a;
-}
+ARBRE creer_arbre(DICO dico, MOT mot, ARBRE filsG, ARBRE filsD, int position)    {
+    ARBRE arbre = malloc(sizeof(struct noeud));
+    arbre->mot = malloc(sizeof(struct mot));
+    arbre->mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
 
-void affiche_noeud(ABR a) {
-    if (!vide(a))   {
-        affiche_noeud(a->filsG);
-        if(!vide(a->filsG)) {
-            printf("|");
-        }
+    mot->taille = 0;
 
-        printf("%s", a->mot->mot);
+    arbre->mot->mot = mot->mot;
+    arbre->filsG = filsG;
+    arbre->filsD = filsD;
 
-        if (!vide(a->filsD)) {
-            printf("|");
-        }
-        affiche_noeud(a->filsD);
+    for (int i = 0; i < dico->taille; i++)  {
+        arbre = ajoute_element(dico, mot, arbre, position);
     }
+
+    return arbre;
 }
 
-void affiche_arbre(ABR a)   {
-    affiche_noeud(a);
-    printf("\n");
-}
+ARBRE ajoute_element(DICO dico, MOT mot, ARBRE arbre, int position)   {
 
-ABR ajoute_element(ABR a, MOT mot, DICO texte)    {
-    if (vide(a))    {
-        return creer_arbre(texte, mot, NULL, NULL);
+    if (vide(arbre))    {
+        return creer_arbre(dico, mot, NULL, NULL, position);
     }
     else    {
-        mot = estMot(texte, mot);
-
-        for (int i = 0; i < mot->taille; i++)  {
-            mot->mot[i] = tolower(mot->mot[i]);
+        for (int i = 0; i < mot->taille; i++)   {
+            
+            if (arbre->mot->mot[i] > mot->mot[i])   {
+                arbre->filsG = ajoute_element(dico, mot, arbre->filsG, position);
+            }
+            else    {
+                arbre->filsD = ajoute_element(dico, mot, arbre->filsD, position);
+            }
         }
-
-        if (mot->mot == a->mot->mot)    {
-            a->mot->nbOcurrence++;
-        }
-
-        if (mot->mot < a->mot->mot) {
-            a->filsG = ajoute_element(a->filsG, mot, texte);
-        }
-        else    {
-            a->filsD = ajoute_element(a->filsD, mot, texte);
-        }
-        return a;
+        return arbre;
     }
 }
 
-void liberer_ABR(ABR a) {
-    if (vide(a))    {
+void affiche_arbre(ARBRE arbre) {
+    if (!vide(arbre))   {
+        affiche_arbre(arbre->filsG);
+        if (!vide(arbre->filsG))    {
+            printf("|");
+        }
+        for (int i = 0; i < arbre->mot->taille; i++)    {
+            printf("%c", arbre->mot->mot[i]);
+        }
+        if (!vide(arbre->filsD))    {
+            printf("|");
+        }
+        affiche_arbre(arbre->filsD);
+    }
+}
+
+void liberer_arbre(ARBRE arbre) {
+    if (vide(arbre))    {
         return;
     }
-    liberer_ABR(a->filsD);
-    liberer_ABR(a->filsG);
-    free(a);
+    liberer_arbre(arbre->filsD);
+    liberer_arbre(arbre->filsG);
+    free(arbre->mot->mot);
+    free(arbre->mot);
+    free(arbre);
 }
+

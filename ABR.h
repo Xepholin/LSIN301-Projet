@@ -4,16 +4,16 @@ struct noeud {
     struct noeud *filsD;
 };
 
-typedef struct noeud *ABR;
+typedef struct noeud *ARBRE;
 
-bool vide(ABR a);
+bool vide(ARBRE arbre);
 
-ABR creer_arbre(DICO texte, MOT mot, ABR filsG, ABR filsD);
+void recupMot(DICO texte, MOT motActu, int position);
 
-void affiche_noeud(ABR a);
+ARBRE creer_arbre(DICO dico, MOT mot, ARBRE filsG, ARBRE filsD, int position);
 
-void affiche_arbre(ABR a);
+ARBRE ajoute_element(DICO dico, MOT mot, ARBRE arbre, int position);
 
-ABR ajoute_element(ABR a, MOT mot, DICO texte);
+void affiche_arbre(ARBRE arbre);
 
-void liberer_ABR(ABR a);
+void liberer_arbre(ARBRE arbre);
