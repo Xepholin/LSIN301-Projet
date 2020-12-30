@@ -6,8 +6,8 @@
 
 DICO creer_dico(char **argv, int n) {
     DICO dico = malloc(sizeof(struct dico));
-    dico->T = malloc(n * sizeof(char));
-    dico->L = malloc(n * sizeof(int));
+    dico->T = malloc(n * sizeof(char *));
+    dico->L = malloc(n * sizeof(int *));
 
     FILE * texte = NULL;
     texte = fopen(argv[1], "r");
@@ -22,7 +22,7 @@ DICO creer_dico(char **argv, int n) {
             fscanf(texte, "%c", &dico->T[i]);
 
             if (dico->T[i] == '\n') {
-                dico->L[j] = j+1;
+                dico->L[j] = j;
                 j++;
             }
         }

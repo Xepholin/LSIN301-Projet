@@ -17,20 +17,24 @@ bool vide(ARBRE arbre)  {
     }
 }
 
-ARBRE creer_arbre(MOT mot, ARBRE filsG, ARBRE filsD)    {
+ARBRE creer_arbre(DICO dico, MOT mot, int position, ARBRE filsG, ARBRE filsD)   {
     ARBRE arbre = malloc(sizeof(struct noeud));
+    arbre->mot = malloc(sizeof(struct mot));
+    mot = detecte_mot(dico, mot, position);
 
     arbre->mot = mot;
     arbre->filsD = filsD;
     arbre->filsG = filsG;
+    free(mot->mot);
 }
 
 ARBRE ajoute_element(DICO dico, MOT mot, int position, ARBRE arbre) {
     if (vide(arbre))    {
-        return creer_arbre(mot, NULL, NULL);
+        arbre->mot->nbOcurrence = 0;
+        return creer_arbre(dico, mot, position, NULL, NULL);
     }
     else    {
-        if (strcoll(arbre->mot->mot, mot->mot) < 0)    {
+        /*if (strcoll(arbre->mot->mot, mot->mot) < 0)    {
             ajoute_element(dico, mot, position, arbre->filsG);
         }
 
@@ -40,26 +44,38 @@ ARBRE ajoute_element(DICO dico, MOT mot, int position, ARBRE arbre) {
 
         else if (strcoll(arbre->mot->mot, mot->mot) == 0)    {
             arbre->mot->nbOcurrence++;
-        }
+        }*/
+        printf("non\n");
         return arbre;
     }
 }
 
-void detecte_mot(DICO texte, MOT mot, int position) {
-    while (position < texte->taille)    {
+MOT detecte_mot(DICO dico, MOT mot, int position) {
+    mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 
-        if (texte->T[position] != ' ')  {
-            mot->mot[mot->taille] = texte->T[position];
-            position++;
-            mot->taille++;
+    while (position < dico->taille)	{
+		if (dico->T[position] != ' ')	{
+			mot->mot[mot->taille] = dico->T[position];
+			position++;
+			mot->taille++;
 
-            if (texte->T[position] == ' ')    {
-                break;
-            }
-            
-        }
-        else    {
-            position++;
-        }
+			if (dico->T[position] == ' ')	{
+				mot->mot[mot->taille] = '\0';
+				return mot;
+			}
+		}
+		else	{
+			position++;
+		}
+	}
+    return mot;
+}
+
+void liberer_arbre(ARBRE arbre) {
+    if (vide(arbre))    {
+        return;
     }
+    liberer_arbre(arbre->filsD);
+    liberer_arbre(arbre->filsG);
+    free(arbre);
 }

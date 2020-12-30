@@ -8,8 +8,10 @@ typedef struct noeud *ARBRE;
 
 bool vide(ARBRE arbre);
 
-ARBRE creer_arbre(MOT mot, ARBRE filsG, ARBRE filsD);
+ARBRE creer_arbre(DICO dico, MOT mot, int position, ARBRE filsG, ARBRE filsD);
 
 ARBRE ajoute_element(DICO dico, MOT mot, int position, ARBRE arbre);
 
-void detecte_mot(DICO dico, MOT mot, int position);
+MOT detecte_mot(DICO dico, MOT mot, int position);
+
+void liberer_arbre(ARBRE arbre);

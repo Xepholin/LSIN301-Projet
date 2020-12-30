@@ -25,33 +25,16 @@ int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
 	MOT mot = malloc(sizeof(struct mot));
-	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-	mot->mot = "";
+	ARBRE arbre = malloc(sizeof(struct noeud));
+	arbre = NULL;
+	int position = 0;
 	mot->taille = 0;
-	int pos = 0;
 
-	detecte_mot(dico, mot, pos);
+	arbre = ajoute_element(dico, mot, position, arbre);
 
-	MOT A = malloc(sizeof(struct mot));
-
-	A->mot = "Salut f g  nul";
-
-	if (strcoll(A->mot, mot->mot) < 0)	{
-		printf("A < B");
-	}
-	else if (strcoll(A->mot, mot->mot) > 0)	{
-		printf("A > B");
-	}
-	else if (strcoll(A->mot, mot->mot) == 0)	{
-		printf("A = B");
-	}
-
-	printf("\n");
-
-	printf("%s\n", mot->mot);
-
+	//printf("%s\n", arbre->mot->mot);
 	
-
+	liberer_arbre(arbre);
 	free(mot);
 	liberer_fichier(dico);
 	return 0;
