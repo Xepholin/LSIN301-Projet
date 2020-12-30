@@ -3,12 +3,12 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
 #include "constantes.h"
 #include "lectStock.h"
 #include "ABR.h"
 
-bool vide(ARBRE arbre)    {
-
+bool vide(ARBRE arbre)  {
     if (arbre == NULL)  {
         return true;
     }
@@ -17,87 +17,49 @@ bool vide(ARBRE arbre)    {
     }
 }
 
-void recupMot(DICO texte, MOT motActu, int position)  {
-    motActu->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-
-    while (position < texte->taille)   {
-    
-        if (texte->T[position] == ' ') {
-            position++;
-        }
-        else    {
-            motActu->mot[motActu->taille] = texte->T[position];
-            position++;
-            motActu->taille++;
-        }
-        
-        if (texte->T[position] == ' ' && texte->T[position-1] >= 65)  {
-            break;
-        }
-    }
-}
-
-ARBRE creer_arbre(DICO dico, MOT mot, ARBRE filsG, ARBRE filsD, int position)    {
+ARBRE creer_arbre(MOT mot, ARBRE filsG, ARBRE filsD)    {
     ARBRE arbre = malloc(sizeof(struct noeud));
-    arbre->mot = malloc(sizeof(struct mot));
-    arbre->mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
 
-    mot->taille = 0;
-
-    arbre->mot->mot = mot->mot;
-    arbre->filsG = filsG;
+    arbre->mot = mot;
     arbre->filsD = filsD;
-
-    for (int i = 0; i < dico->taille; i++)  {
-        arbre = ajoute_element(dico, mot, arbre, position);
-    }
-
-    return arbre;
+    arbre->filsG = filsG;
 }
 
-ARBRE ajoute_element(DICO dico, MOT mot, ARBRE arbre, int position)   {
-
+ARBRE ajoute_element(DICO dico, MOT mot, int position, ARBRE arbre) {
     if (vide(arbre))    {
-        return creer_arbre(dico, mot, NULL, NULL, position);
+        return creer_arbre(mot, NULL, NULL);
     }
     else    {
-        for (int i = 0; i < mot->taille; i++)   {
-            
-            if (arbre->mot->mot[i] > mot->mot[i])   {
-                arbre->filsG = ajoute_element(dico, mot, arbre->filsG, position);
-            }
-            else    {
-                arbre->filsD = ajoute_element(dico, mot, arbre->filsD, position);
-            }
+        if (strcoll(arbre->mot->mot, mot->mot) < 0)    {
+            ajoute_element(dico, mot, position, arbre->filsG);
+        }
+
+        else if (strcoll(arbre->mot->mot, mot->mot) > 0)    {
+            ajoute_element(dico, mot, position, arbre->filsD);
+        }
+
+        else if (strcoll(arbre->mot->mot, mot->mot) == 0)    {
+            arbre->mot->nbOcurrence++;
         }
         return arbre;
     }
 }
 
-void affiche_arbre(ARBRE arbre) {
-    if (!vide(arbre))   {
-        affiche_arbre(arbre->filsG);
-        if (!vide(arbre->filsG))    {
-            printf("|");
+void detecte_mot(DICO texte, MOT mot, int position) {
+    while (position < texte->taille)    {
+
+        if (texte->T[position] != ' ')  {
+            mot->mot[mot->taille] = texte->T[position];
+            position++;
+            mot->taille++;
+
+            if (texte->T[position] == ' ')    {
+                break;
+            }
+            
         }
-        for (int i = 0; i < arbre->mot->taille; i++)    {
-            printf("%c", arbre->mot->mot[i]);
+        else    {
+            position++;
         }
-        if (!vide(arbre->filsD))    {
-            printf("|");
-        }
-        affiche_arbre(arbre->filsD);
     }
 }
-
-void liberer_arbre(ARBRE arbre) {
-    if (vide(arbre))    {
-        return;
-    }
-    liberer_arbre(arbre->filsD);
-    liberer_arbre(arbre->filsG);
-    free(arbre->mot->mot);
-    free(arbre->mot);
-    free(arbre);
-}
-

@@ -14,8 +14,10 @@ DICO creer_dico(char **argv, int n) {
     int j = 0;
     dico->taille = n;
 
-    if (texte != NULL)  {
-
+    if (texte == NULL)  {
+        printf("ERREUR : Le texte n'a pas pu être ouvert");
+    }
+    else    {
         for (int i = 0; i < n; i++) {
             fscanf(texte, "%c", &dico->T[i]);
 
@@ -25,7 +27,6 @@ DICO creer_dico(char **argv, int n) {
             }
         }
     }
-
 
     fclose(texte);
     return dico;

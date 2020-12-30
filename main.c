@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
 #include "constantes.h"
 #include "lectStock.h"
 #include "ABR.h"
@@ -24,40 +25,34 @@ int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
 	MOT mot = malloc(sizeof(struct mot));
-	
+	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
+	mot->mot = "";
+	mot->taille = 0;
 	int pos = 0;
 
-	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
-	mot->taille = 0;
+	detecte_mot(dico, mot, pos);
 
-    while (pos < dico->taille)   {
-    
-        if (dico->T[pos] == ' ') {
-            pos++;
-        }
-        else    {
-            mot->mot[mot->taille] = dico->T[pos];
-            pos++;
-            mot->taille++;
-        }
-        
-        if (dico->T[pos] == ' ' && dico->T[pos-1] >= 65)  {
-            break;
-        }
-    }
+	MOT A = malloc(sizeof(struct mot));
 
-	for (int i = 0; i < mot->taille; i++)	{
-		printf("%c", mot->mot[i]);
+	A->mot = "Salut f g  nul";
+
+	if (strcoll(A->mot, mot->mot) < 0)	{
+		printf("A < B");
 	}
+	else if (strcoll(A->mot, mot->mot) > 0)	{
+		printf("A > B");
+	}
+	else if (strcoll(A->mot, mot->mot) == 0)	{
+		printf("A = B");
+	}
+
 	printf("\n");
+
+	printf("%s\n", mot->mot);
+
 	
-	//ARBRE a = creer_arbre(dico, mot, NULL, NULL, pos);
 
-	//affiche_arbre(a);
-
-	free(mot->mot);
 	free(mot);
-	//liberer_arbre(a);
 	liberer_fichier(dico);
 	return 0;
 }
