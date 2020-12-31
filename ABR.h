@@ -1,5 +1,18 @@
+struct mot  {
+    char *mot;
+    int taille;
+    int nbOcurrence;
+    int position_dico;
+    bool motFin;
+    bool motSuivant;
+};
+
+typedef struct mot *MOT;
+
 struct noeud {
-    struct mot *mot;
+    char *mot;
+    int tailleMot;
+    int nbOcurrenceMot;
     struct noeud *filsG;
     struct noeud *filsD;
 };

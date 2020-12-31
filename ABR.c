@@ -19,20 +19,23 @@ bool vide(ARBRE arbre)  {
 
 ARBRE creer_arbre(DICO dico, MOT mot, ARBRE filsG, ARBRE filsD)   {
     ARBRE arbre = malloc(sizeof(struct noeud));
-    arbre->mot = malloc(sizeof(struct mot));
+    arbre->mot = malloc(mot->taille * sizeof(char *));
 
-    arbre->mot->mot = malloc(mot->taille * sizeof(char *));
-    arbre->mot->nbOcurrence = 0;
-
-    arbre->mot = mot;
+    arbre->nbOcurrenceMot = 0;
+    arbre->mot = mot->mot;
+    arbre->tailleMot = mot->taille;
     arbre->filsD = filsD;
     arbre->filsG = filsG;
 
     mot->motSuivant = true;
     
     mot->taille = 0;
-    printf("%s\n", arbre->mot->mot);
-    
+    printf("%s\n", arbre->mot);
+
+    mot->mot[0] = '\0';
+    printf("%s\n", mot->mot);
+    printf("%s\n", arbre->mot);
+
     return arbre;
 }
 
@@ -46,19 +49,19 @@ ARBRE ajoute_element(DICO dico, MOT mot, ARBRE arbre) {
         return creer_arbre(dico, mot, NULL, NULL);
     }
     else    {
-        printf("%s\n", mot->mot);
-        printf("%s\n", arbre->mot->mot);
+        
 
-        if (strcoll(arbre->mot->mot, mot->mot) < 0)    {
+        if (strcoll(arbre->mot, mot->mot) < 0)    {
             ajoute_element(dico, mot, arbre->filsG);
         }
 
-        else if (strcoll(arbre->mot->mot, mot->mot) > 0)    {
+        else if (strcoll(arbre->mot, mot->mot) > 0)    {
             ajoute_element(dico, mot, arbre->filsD);
         }
 
-        else if (strcoll(arbre->mot->mot, mot->mot) == 0)    {
-            arbre->mot->nbOcurrence++;
+        else if (strcoll(arbre->mot, mot->mot) == 0)    {
+            arbre->nbOcurrenceMot++;
+            printf("%d\n", arbre->nbOcurrenceMot);
         }
         return arbre;
     }
@@ -91,7 +94,7 @@ void affiche_noeud(ARBRE arbre) {
             printf("|");
         }
 
-        printf("%s", arbre->mot->mot);
+        printf("%s", arbre->mot);
 
         if (!vide(arbre->filsD)) {
             printf("|");

@@ -29,9 +29,11 @@ int nombre_caract(char **argv)	{
 int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
+	
 	MOT mot = malloc(sizeof(struct mot));
 	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 	ARBRE arbre = malloc(sizeof(struct noeud));
+
 	arbre = NULL;
 	mot->taille = 0;
 	mot->position_dico = 0;
@@ -39,7 +41,6 @@ int main(int argc, char **argv)	{
 	mot->motSuivant = true;
 
 	arbre = ajoute_element(dico, mot, arbre);
-	printf("%s\n", arbre->mot->mot);
 	arbre = ajoute_element(dico, mot, arbre);
 
 	liberer_arbre(arbre);
