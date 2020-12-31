@@ -13,8 +13,13 @@ int nombre_caract(char **argv)	{
 	texte = fopen(argv[1], "r");
 	int compt = 0;
 
-	while (fgetc(texte) != EOF)	{
-		compt++;
+	if (texte == NULL)  {
+        printf("ERREUR : Le texte n'a pas pu être ouvert");
+    }
+    else    {
+		while (fgetc(texte) != EOF)	{
+			compt++;
+		}
 	}
 
 	fclose(texte);
@@ -25,17 +30,20 @@ int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
 	MOT mot = malloc(sizeof(struct mot));
+	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 	ARBRE arbre = malloc(sizeof(struct noeud));
 	arbre = NULL;
-	int position = 0;
 	mot->taille = 0;
+	mot->position_dico = 0;
+	mot->motFin = false;
+	mot->motSuivant = true;
 
-	arbre = ajoute_element(dico, mot, position, arbre);
+	arbre = ajoute_element(dico, mot, arbre);
+	printf("%s\n", arbre->mot->mot);
+	arbre = ajoute_element(dico, mot, arbre);
 
-	//printf("%s\n", arbre->mot->mot);
-	
 	liberer_arbre(arbre);
-	free(mot);
+	liberer_mot(mot);
 	liberer_fichier(dico);
 	return 0;
 }
