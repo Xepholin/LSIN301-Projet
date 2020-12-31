@@ -17,49 +17,41 @@ bool vide(ARBRE arbre)  {
     }
 }
 
-ARBRE creer_arbre(DICO dico, MOT mot, ARBRE filsG, ARBRE filsD)   {
+ARBRE creer_arbre(char *mot, ARBRE filsG, ARBRE filsD)   {
     ARBRE arbre = malloc(sizeof(struct noeud));
-    arbre->mot = malloc(mot->taille * sizeof(char *));
+    arbre->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 
     arbre->nbOcurrenceMot = 0;
-    arbre->mot = mot->mot;
-    arbre->tailleMot = mot->taille;
+    arbre->mot = mot;
     arbre->filsD = filsD;
     arbre->filsG = filsG;
-
-    mot->motSuivant = true;
-    
-    mot->taille = 0;
-    printf("%s\n", arbre->mot);
-
-    mot->mot[0] = '\0';
-    printf("%s\n", mot->mot);
-    printf("%s\n", arbre->mot);
 
     return arbre;
 }
 
-ARBRE ajoute_element(DICO dico, MOT mot, ARBRE arbre) {
-    if (mot->motSuivant)    {
-        mot = detecte_mot(dico, mot);
-        mot->motSuivant = false;
+ARBRE ajoute_element(DICO dico, char *mot, bool motSuivant, int position, ARBRE arbre) {
+    if (motSuivant)    {
+        int tailleMot = 0;
+        detecte_mot(dico, mot, position, tailleMot);
+        motSuivant = false;
     }
     
     if (vide(arbre))    {
-        return creer_arbre(dico, mot, NULL, NULL);
+        return creer_arbre(mot, NULL, NULL);
     }
     else    {
-        
+        printf("%s\n", arbre->mot);
+        printf("%s\n", mot);
 
-        if (strcoll(arbre->mot, mot->mot) < 0)    {
-            ajoute_element(dico, mot, arbre->filsG);
+        if (strcoll(arbre->mot, mot) < 0)    {
+            ajoute_element(dico, mot, motSuivant, position, arbre->filsG);
         }
 
-        else if (strcoll(arbre->mot, mot->mot) > 0)    {
-            ajoute_element(dico, mot, arbre->filsD);
+        else if (strcoll(arbre->mot, mot) > 0)    {
+            ajoute_element(dico, mot, motSuivant, position, arbre->filsD);
         }
 
-        else if (strcoll(arbre->mot, mot->mot) == 0)    {
+        else if (strcoll(arbre->mot, mot) == 0)    {
             arbre->nbOcurrenceMot++;
             printf("%d\n", arbre->nbOcurrenceMot);
         }
@@ -67,24 +59,22 @@ ARBRE ajoute_element(DICO dico, MOT mot, ARBRE arbre) {
     }
 }
 
-MOT detecte_mot(DICO dico, MOT mot) {
-    while (mot->position_dico < dico->taille)	{
-		if (dico->T[mot->position_dico] != ' ')	{
-			mot->mot[mot->taille] = dico->T[mot->position_dico];
-			mot->position_dico++;
-			mot->taille++;
+void detecte_mot(DICO dico, char *mot, int position, int tailleMot) {
+    while (position < dico->taille)	{
+		if (dico->T[position] != ' ')	{
+			mot[tailleMot] = dico->T[position];
+			position++;
+			tailleMot++;
 
-			if (dico->T[mot->position_dico] == ' ')	{
-				mot->mot[mot->taille] = '\0';
-				return mot;
+			if (dico->T[position] == ' ')	{
+				mot[tailleMot] = '\0';
+                break;
 			}
 		}
 		else	{
-			mot->position_dico++;
+			position++;
 		}
 	}
-    mot->motFin = true;
-    return mot;
 }
 
 void affiche_noeud(ARBRE arbre) {
@@ -117,7 +107,6 @@ void liberer_arbre(ARBRE arbre) {
     free(arbre);
 }
 
-void liberer_mot(MOT mot)   {
-    free(mot->mot);
+void liberer_mot(char *mot)   {
     free(mot);
 }
