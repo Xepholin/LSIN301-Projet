@@ -1,33 +1,22 @@
-struct mot  {
-    char *mot;
-    int taille;
-    int nbOcurrence;
-    int position_dico;
-    bool motSuivant;
-};
-
-typedef struct mot *MOT;
-
-struct noeud {
-    struct mot *mot;
-    struct noeud *filsG;
-    struct noeud *filsD;
+struct noeud    {
+    char * motArbre;
+    int nbOcurrenceMot;
+    struct noeud *droite;
+    struct noeud *gauche;
 };
 
 typedef struct noeud *ARBRE;
 
-bool vide(ARBRE arbre);
+bool vide (ARBRE A);
 
-ARBRE creer_arbre(MOT mot, DICO dico, ARBRE filsG, ARBRE filsD);
+ARBRE creer_arbre(char *mot, ARBRE droite, ARBRE gauche);
 
-ARBRE ajoute_element(DICO dico, MOT mot, ARBRE arbre);
+char *recup_mot(char *argv, int *position, char *mot);
 
-MOT detecte_mot(DICO dico, MOT mot, ARBRE arbre);
+ARBRE ajoute_element(char *argv, int n, int *position, char *mot,  bool motSuivant, ARBRE A);
 
-void affiche_noeud(ARBRE arbre);
+void affiche_arbre(ARBRE A);
 
-void affiche_arbre(ARBRE arbre);
+void liberer_arbre(ARBRE A);
 
-void liberer_arbre(ARBRE arbre);
-
-void liberer_mot(MOT mot);
+void liberer_mot(char *mot);

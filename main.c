@@ -8,9 +8,9 @@
 #include "lectStock.h"
 #include "ABR.h"
 
-int nombre_caract(char **argv)	{
+int nombre_caract(char *argv)	{
 	FILE * texte = NULL;
-	texte = fopen(argv[1], "r");
+	texte = fopen(argv, "r");
 	int compt = 0;
 
 	if (texte == NULL)  {
@@ -27,28 +27,33 @@ int nombre_caract(char **argv)	{
 }
 
 int main(int argc, char **argv)	{
-	int nbc = nombre_caract(argv);
-	DICO dico = creer_dico(argv, nbc);
-	
-	MOT mot = malloc(sizeof(struct mot));
-	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
+	int nbc = nombre_caract(argv[1]);
+	DICO dico = creer_dico(argv[1], nbc);
+	int position = 1;
+	bool motSuivant = true;
+	char *mot = NULL;
+	ARBRE A = NULL;
 
-	/*ARBRE arbre = malloc(sizeof(struct noeud));
-	arbre->mot = malloc(sizeof(struct mot));*/
+	for (int i = 0; i < nbc; i++)	{
+		A = ajoute_element(argv[1], nbc, &position, mot, motSuivant, A);
+	}
 
-	mot->motSuivant = true;
-	mot->position_dico = 0;
-	mot->taille = 0;
+	/*char *test1 = "a";
+	char *test2 = "b";
 
-	/*arbre->mot->mot = "arbre";
-	mot->mot = "mot";
+	if (strcoll(test1, test2) < 0)	{
+		printf("1 > 2\n");
+	}
+	else if (strcoll(test1, test2) > 0)	{
+		printf("1 < 2\n");
+	}
+	else	{
+		printf("1 = 2\n");
+	}*/
 
-	printf("arbre = %s\n", arbre->mot->mot);
-	printf("mot = %s\n", mot->mot);*/
+	affiche_arbre(A);
 
-    ARBRE arbre = creer_arbre(mot, dico, NULL, NULL); 
-
-	liberer_arbre(arbre);
+	liberer_arbre(A);
 	liberer_mot(mot);
 	liberer_fichier(dico);
 

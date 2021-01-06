@@ -6,7 +6,7 @@ struct dico {
 
 typedef struct dico *DICO;
 
-DICO creer_dico(char **argv, int n);
+DICO creer_dico(char *argv, int n);
 
 void affiche_dico(DICO dico);
 

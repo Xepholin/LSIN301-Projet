@@ -5,13 +5,13 @@
 #include "constantes.h"
 #include "lectStock.h"
 
-DICO creer_dico(char **argv, int n) {
+DICO creer_dico(char *argv, int n) {
     DICO dico = malloc(sizeof(struct dico));
     dico->T = malloc(n * sizeof(char *));
     dico->L = malloc(n * sizeof(int *));
 
     FILE * texte = NULL;
-    texte = fopen(argv[1], "r");
+    texte = fopen(argv, "r");
     int j = 0;
     dico->taille = n;
 
