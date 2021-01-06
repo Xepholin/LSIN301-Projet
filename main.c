@@ -30,21 +30,23 @@ int main(int argc, char **argv)	{
 	int nbc = nombre_caract(argv);
 	DICO dico = creer_dico(argv, nbc);
 	
-	ARBRE arbre = malloc(sizeof(struct noeud));
-	char *mot = malloc(MOT_LE_PLUS_LONG * sizeof(char));
+	MOT mot = malloc(sizeof(struct mot));
+	mot->mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 
-	arbre = NULL;
-	bool motSuivant = true;
+	/*ARBRE arbre = malloc(sizeof(struct noeud));
+	arbre->mot = malloc(sizeof(struct mot));*/
 
-	int position = 0;
+	mot->motSuivant = true;
+	mot->position_dico = 0;
+	mot->taille = 0;
 
+	/*arbre->mot->mot = "arbre";
+	mot->mot = "mot";
 
-	arbre = ajoute_element(dico, mot, motSuivant, position, arbre);
-	printf("%s\n", arbre->mot);
-	arbre = ajoute_element(dico, mot, motSuivant, position, arbre);
+	printf("arbre = %s\n", arbre->mot->mot);
+	printf("mot = %s\n", mot->mot);*/
 
-	
-
+    ARBRE arbre = creer_arbre(mot, dico, NULL, NULL); 
 
 	liberer_arbre(arbre);
 	liberer_mot(mot);
