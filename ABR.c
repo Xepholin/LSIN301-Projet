@@ -42,7 +42,6 @@ char *recup_mot(char *argv, int *position, char *mot)   {
         }
 
 	}
-
     fclose(texte);
     return mot;
 }
