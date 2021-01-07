@@ -29,7 +29,7 @@ ARBRE creer_arbre(char *mot, ARBRE droite, ARBRE gauche) {
 }
 
 char *recup_mot(char *argv, int *position, char *mot)   {
-    mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
+    
     FILE *texte = NULL;
     texte = fopen(argv, "r");
 
@@ -40,21 +40,49 @@ char *recup_mot(char *argv, int *position, char *mot)   {
         for (int i = 0; i < *position; i++)  {
             fscanf(texte, "%s", mot);
         }
-
 	}
     fclose(texte);
     return mot;
 }
 
-ARBRE ajoute_element(char *argv, int n, int *position, char *mot,  bool motSuivant, ARBRE A)  {
+int compare(ARBRE A, char *mot) {
+    if (strcoll(A->motArbre, mot) == 0)    {
+        return 0;
+    }
+    else if ((strcoll(A->motArbre, mot) < 0))    {
+        return 1;
+    }
+    else if (strcoll(A->motArbre, mot) > 0) {
+        return 2;
+    }
+    else    {
+        return 3;
+    }
+}
+
+ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBRE A)  {
     if (motSuivant) {
+        
+        FILE *texte = NULL;
+        texte = fopen(argv, "r");
+
+        if (texte == NULL)  {
+            printf("ERREUR : Le texte n'a pas pu être ouvert");
+        }
+        else    {
+            for (int i = 0; i < *position; i++)  {
+                fscanf(texte, "%s", mot);
+            }
+        }
+        fclose(texte);
+
         int i = 0;
-        mot = recup_mot(argv, position, mot);
         *position = *position + 1;
         while (mot[i] != '\0')  {
             mot[i] = tolower(mot[i]);
             i++;
         }
+        
         motSuivant = false;
     }
 
@@ -62,17 +90,25 @@ ARBRE ajoute_element(char *argv, int n, int *position, char *mot,  bool motSuiva
         return creer_arbre(mot, NULL, NULL);
     }
     else    {
-        if (strcoll(A->motArbre, mot) < 0)    {
-            A->gauche = ajoute_element(argv, n, position, mot, motSuivant, A->gauche);
-        }
-
-        else if (strcoll(A->motArbre, mot) > 0)    {
-            A->droite = ajoute_element(argv, n, position, mot, motSuivant, A->droite);
-        }
-
-        else if (strcoll(A->motArbre, mot) == 0)    {
-            A->nbOcurrenceMot++;
-            motSuivant = true;
+        printf("%s\n", A->motArbre);
+        printf("%s\n", mot);
+        switch(compare(A, mot)) {
+            case 0:
+                A->nbOcurrenceMot++;
+                motSuivant = true;
+                break;
+            case 1:
+                A->gauche = ajoute_element(argv, position, mot, motSuivant, A->gauche);
+                break;
+            case 2:
+                A->droite = ajoute_element(argv, position, mot, motSuivant, A->droite);
+                break;
+            case 3:
+                printf("Erreur comparaison mot\n");
+                break;
+            default:
+                printf("Erreur comparaison mot\n");
+                break;
         }
         return A;
     }
@@ -106,8 +142,4 @@ void liberer_arbre(ARBRE A) {
     liberer_arbre(A->droite);
     liberer_arbre(A->gauche);
     free(A);
-}
-
-void liberer_mot(char *mot) {
-    free(mot);
 }

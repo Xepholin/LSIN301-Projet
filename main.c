@@ -31,12 +31,13 @@ int main(int argc, char **argv)	{
 	DICO dico = creer_dico(argv[1], nbc);
 	int position = 1;
 	bool motSuivant = true;
-	char *mot = NULL;
 	ARBRE A = NULL;
+	char *mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 
-	for (int i = 0; i < nbc; i++)	{
-		A = ajoute_element(argv[1], nbc, &position, mot, motSuivant, A);
-	}
+	//for (int i = 0; i < nbc; i++)	{
+		A = ajoute_element(argv[1], &position, mot, motSuivant, A);
+		A = ajoute_element(argv[1], &position, mot, motSuivant, A);
+	//}
 
 	/*char *test1 = "a";
 	char *test2 = "b";
@@ -51,10 +52,9 @@ int main(int argc, char **argv)	{
 		printf("1 = 2\n");
 	}*/
 
-	affiche_arbre(A);
-
+	//affiche_arbre(A);
+	free(mot);
 	liberer_arbre(A);
-	liberer_mot(mot);
 	liberer_fichier(dico);
 
 	return 0;
