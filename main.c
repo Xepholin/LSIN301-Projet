@@ -31,29 +31,21 @@ int main(int argc, char **argv)	{
 	DICO dico = creer_dico(argv[1], nbc);
 	int position = 1;
 	bool motSuivant = true;
+	char *mot;
+	//mot = NULL;
 	ARBRE A = NULL;
-	char *mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 
-	//for (int i = 0; i < nbc; i++)	{
+	for (int i = 0; i < nbc; i++)	{
+		mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 		A = ajoute_element(argv[1], &position, mot, motSuivant, A);
-		A = ajoute_element(argv[1], &position, mot, motSuivant, A);
-	//}
-
-	/*char *test1 = "a";
-	char *test2 = "b";
-
-	if (strcoll(test1, test2) < 0)	{
-		printf("1 > 2\n");
+		
+		//free(mot);
 	}
-	else if (strcoll(test1, test2) > 0)	{
-		printf("1 < 2\n");
-	}
-	else	{
-		printf("1 = 2\n");
-	}*/
+	printf("1/%p\n", mot);
+	printf("2/%p\n", A->motArbre);
+	
 
-	//affiche_arbre(A);
-	free(mot);
+	affiche_arbre(A);
 	liberer_arbre(A);
 	liberer_fichier(dico);
 

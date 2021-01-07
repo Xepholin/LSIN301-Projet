@@ -29,7 +29,9 @@ ARBRE creer_arbre(char *mot, ARBRE droite, ARBRE gauche) {
 }
 
 char *recup_mot(char *argv, int *position, char *mot)   {
-    
+    //mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
+    //mot = NULL;
+    int i = 0;
     FILE *texte = NULL;
     texte = fopen(argv, "r");
 
@@ -41,6 +43,13 @@ char *recup_mot(char *argv, int *position, char *mot)   {
             fscanf(texte, "%s", mot);
         }
 	}
+
+    *position = *position + 1;
+    while (mot[i] != '\0')  {
+        mot[i] = tolower(mot[i]);
+        i++;
+    }
+    
     fclose(texte);
     return mot;
 }
@@ -60,29 +69,9 @@ int compare(ARBRE A, char *mot) {
     }
 }
 
-ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBRE A)  {
+ARBRE ajoute_element(char *argv, int *position, char *mot,  bool motSuivant, ARBRE A)  {
     if (motSuivant) {
-        
-        FILE *texte = NULL;
-        texte = fopen(argv, "r");
-
-        if (texte == NULL)  {
-            printf("ERREUR : Le texte n'a pas pu être ouvert");
-        }
-        else    {
-            for (int i = 0; i < *position; i++)  {
-                fscanf(texte, "%s", mot);
-            }
-        }
-        fclose(texte);
-
-        int i = 0;
-        *position = *position + 1;
-        while (mot[i] != '\0')  {
-            mot[i] = tolower(mot[i]);
-            i++;
-        }
-        
+        mot = recup_mot(argv, position, mot);
         motSuivant = false;
     }
 
@@ -90,8 +79,6 @@ ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBR
         return creer_arbre(mot, NULL, NULL);
     }
     else    {
-        printf("%s\n", A->motArbre);
-        printf("%s\n", mot);
         switch(compare(A, mot)) {
             case 0:
                 A->nbOcurrenceMot++;
@@ -142,4 +129,8 @@ void liberer_arbre(ARBRE A) {
     liberer_arbre(A->droite);
     liberer_arbre(A->gauche);
     free(A);
+}
+
+void liberer_mot(char *mot) {
+    free(mot);
 }
