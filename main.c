@@ -35,12 +35,16 @@ int main(int argc, char **argv)	{
 	//mot = NULL;
 	ARBRE A = NULL;
 
+
 	for (int i = 0; i < nbc; i++)	{
 		mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
 		A = ajoute_element(argv[1], &position, mot, motSuivant, A);
 		
 		//free(mot);
 	}
+
+	printf("%d\n", desequilibre(A));
+
 	printf("1/%p\n", mot);
 	printf("2/%p\n", A->motArbre);
 	

@@ -8,12 +8,36 @@
 #include "lectStock.h"
 #include "ABR.h"
 
-bool vide (ARBRE A) {
+bool vide(ARBRE A) {
     if (A == NULL)  {
         return true;
     }
     else    {
         return false;
+    }
+}
+
+int max(int a, int b)  {
+    if (a < b)  {
+        return b;
+    }
+    else if (a > b) {
+        return a;
+    }
+    else    {
+        return a;
+    }
+}
+
+int min(int a, int b)  {
+    if (a < b)  {
+        return a;
+    }
+    else if (a > b) {
+        return b;
+    }
+    else    {
+        return a;
     }
 }
 
@@ -69,7 +93,7 @@ int compare(ARBRE A, char *mot) {
     }
 }
 
-ARBRE ajoute_element(char *argv, int *position, char *mot,  bool motSuivant, ARBRE A)  {
+ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBRE A)  {
     if (motSuivant) {
         mot = recup_mot(argv, position, mot);
         motSuivant = false;
@@ -99,6 +123,83 @@ ARBRE ajoute_element(char *argv, int *position, char *mot,  bool motSuivant, ARB
         }
         return A;
     }
+}
+
+int hauteur_sous_arbre(ARBRE A) {
+    if (vide(A))    {
+        return 0;
+    }
+    else    {
+        A->hauteurD = hauteur_sous_arbre(A->droite);
+        A->hauteurG = hauteur_sous_arbre(A->gauche);
+
+        return (1 + max(A->hauteurD, A->hauteurG));
+    }
+}
+
+int hauteur_arbre(ARBRE A)  {
+    if (vide(A))    {
+        return 0;
+    }
+    else    {
+        return max(hauteur_sous_arbre(A->droite), hauteur_sous_arbre(A->gauche));
+    }
+}
+
+int desequilibre(ARBRE A)   {
+    if (A->droite == NULL && A->gauche == NULL) {
+        return 0;
+    }
+    else    {
+        return (hauteur_sous_arbre(A->droite) - hauteur_sous_arbre(A->gauche));
+    }
+}
+
+ARBRE rotation_droite(ARBRE A) {
+    ARBRE C = malloc(sizeof(struct noeud));
+
+    C = A;
+    A = A->gauche;
+    A->droite = C->gauche;
+    C = A->droite;
+
+    liberer_arbre(C);
+    return A;
+}
+
+ARBRE rotation_gauche(ARBRE A) {
+    ARBRE C = malloc(sizeof(struct noeud));
+
+    C = A;
+    A = A->droite;
+    A->gauche = C->droite;
+    C = A->gauche;
+
+    liberer_arbre(C);
+    return A;
+}
+
+ARBRE equilibre(ARBRE A)    {
+    if (desequilibre(A) == 2)   {
+        if (desequilibre(A->gauche) == 1 || desequilibre(A->gauche) == 0) {
+            A = rotation_droite(A);
+        }
+        else    {
+            A->gauche = rotation_gauche(A->gauche);
+            A = rotation_droite(A);
+        }
+    } 
+    else if (desequilibre(A) == -2)   {
+        if (desequilibre(A->droite) == 0 || desequilibre(A->droite) == -1)  {
+            A = rotation_gauche(A);
+        }
+        else    {
+            A->droite = rotation_droite(A->droite);
+            A = rotation_gauche(A);
+        }
+    }
+
+    return A;
 }
 
 void affiche_noeud(ARBRE A) {

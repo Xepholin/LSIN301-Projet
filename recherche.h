@@ -1,0 +1,1 @@
+void recherche (char *argv, ARBRE A);
