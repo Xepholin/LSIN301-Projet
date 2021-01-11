@@ -74,7 +74,7 @@ int main(int argc, char **argv)	{
 	ARBRE A = NULL;
 
 	for (int i = 0; motRecherche[i] != '\0'; i++)  {
-	motRecherche[i] = tolower(motRecherche[i]);
+		motRecherche[i] = tolower(motRecherche[i]);
 	}
 
 	for (int i = 0; i < nbm; i++)	{

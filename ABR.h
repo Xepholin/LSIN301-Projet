@@ -6,6 +6,7 @@ struct noeud    {
     int hauteurG;
     struct noeud *droite;
     struct noeud *gauche;
+    struct noeud *parent;
 };
 
 typedef struct noeud *ARBRE;
@@ -24,6 +25,8 @@ int compare (ARBRE A, char *mot);
 
 ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBRE A);
 
+ARBRE creation_parent(ARBRE A);
+
 int hauteur_sous_arbre(ARBRE A);
 
 int hauteur_arbre(ARBRE A);
@@ -35,6 +38,10 @@ ARBRE rotation_droite(ARBRE A);
 ARBRE rotation_gauche(ARBRE A);
 
 ARBRE equilibre(ARBRE A);
+
+ARBRE requilibreD(ARBRE A);
+
+ARBRE requilibreG(ARBRE A);
 
 ARBRE requilibre(ARBRE A);
 

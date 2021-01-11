@@ -50,7 +50,7 @@ ARBRE creer_arbre(char *mot, ARBRE droite, ARBRE gauche) {
     A->motArbre = mot;
     A->droite = droite;
     A->gauche = gauche;
-
+    
     //liberer_mot(mot)
     return A;
 }
@@ -113,10 +113,7 @@ ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBR
         return creer_arbre(mot, NULL, NULL);
     }
     else    {
-
-        /*while (desequilibre(A) != -1 || desequilibre(A) != 0 || desequilibre(A) != 1)  {
-            A = equilibre(A);
-        }*/
+        A = creation_parent(A);
 
         switch(compare(A, mot)) {
             case 0:
@@ -125,9 +122,11 @@ ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBR
                 motSuivant = true;
                 break;
             case 1:
+                //A = equilibre(A);
                 A->gauche = ajoute_element(argv, position, mot, motSuivant, A->gauche);
                 break;
             case 2:
+                //A = equilibre(A);
                 A->droite = ajoute_element(argv, position, mot, motSuivant, A->droite);
                 break;
             case 3:
@@ -136,6 +135,29 @@ ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBR
             default:
                 printf("Erreur comparaison mot\n");
                 break;
+        }
+        return A;
+    }
+}
+
+ARBRE creation_parent(ARBRE A)  {
+    if (vide(A->droite) && vide(A->gauche))    {
+        return A;
+    }
+    else    {
+        if (!vide(A->droite) && !vide(A->gauche)) {
+            A->droite->parent = A;
+            A->gauche->parent = A;
+            A->droite = creation_parent(A->droite);
+            A->gauche = creation_parent(A->gauche);
+        }
+        else if (!vide(A->droite) && vide(A->gauche))  {
+            A->droite->parent = A;
+            A->droite = creation_parent(A->droite);
+        }
+        else    {
+            A->gauche->parent = A;
+            A->gauche = creation_parent(A->gauche);
         }
         return A;
     }
@@ -163,11 +185,11 @@ int hauteur_arbre(ARBRE A)  {
 }
 
 int desequilibre(ARBRE A)   {
-    if (A->droite == NULL && A->gauche == NULL) {
+    if (vide(A->droite) && vide(A->gauche)) {
         return 0;
     }
     else    {
-        return (hauteur_sous_arbre(A->droite) - hauteur_sous_arbre(A->gauche));
+        return (hauteur_sous_arbre(A->gauche) - hauteur_sous_arbre(A->droite));
     }
 }
 
@@ -191,7 +213,7 @@ ARBRE rotation_gauche(ARBRE A) {
 }
 
 ARBRE equilibre(ARBRE A)    {
-    if (desequilibre(A) == 2)   {
+    if (desequilibre(A) > 1)   {
         if (desequilibre(A->gauche) == 1 || desequilibre(A->gauche) == 0) {
             A = rotation_droite(A);
             return A;
@@ -202,7 +224,7 @@ ARBRE equilibre(ARBRE A)    {
             return A;
         }
     } 
-    else if (desequilibre(A) == -2)   {
+    else if (desequilibre(A) < -1)   {
         if (desequilibre(A->droite) == 0 || desequilibre(A->droite) == -1)  {
             A = rotation_gauche(A);
             return A;
@@ -216,11 +238,31 @@ ARBRE equilibre(ARBRE A)    {
     return A;
 }
 
-ARBRE requilibre(ARBRE A)   {
-    while (A->gauche != NULL && A->droite != NULL)  {
-        A = requilibre(A->droite);
-        A = requilibre(A->gauche);
+ARBRE requilibreD(ARBRE A)   {
+    if (desequilibre(A) == -2 || desequilibre(A) == 2)  {
+        A = equilibre(A);
+        return requilibreD(A->parent);
     }
+    else if (vide(A->parent))   {
+        return A;
+    }
+    return A;
+}
+
+ARBRE requilibreG(ARBRE A)   {
+    if (desequilibre(A) == -2 || desequilibre(A) == 2)  {
+        A = equilibre(A);
+        return requilibreG(A->parent);
+    }
+    else if (vide(A->parent))   {
+        return A;
+    }
+    return A;
+}
+
+ARBRE requilibre(ARBRE A)   {
+    A = requilibreD(A);
+    A = requilibreG(A);
     return A;
 }
 
