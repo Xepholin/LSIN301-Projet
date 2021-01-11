@@ -3,10 +3,10 @@ CFLAGS = -c -Wall
 LDFLAGS = -lm
 CSRC = *.c
 HSRC = *.h
-OBJS = main.o constantes.o lectStock.o ABR.o recherche.o
+OBJS = main.o constantes.o lectStock.o ABR.o recherche.o chrono.o
 
 run: dico
-	./dico fichier.txt
+	./dico pg31469.txt Project
 
 dico : $(OBJS)
 	$(CC) -g -o $@ $^
@@ -15,7 +15,7 @@ dico : $(OBJS)
 	$(CC) $(CFLAGS) $<
 	
 valgrind: dico
-	valgrind ./dico fichier.txt
+	valgrind ./dico pg31469.txt Project
 
 
 clean:

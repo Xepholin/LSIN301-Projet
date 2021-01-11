@@ -23,7 +23,7 @@ DICO creer_dico(char *argv, int n) {
             fscanf(texte, "%c", &dico->T[i]);
 
             if (dico->T[i] == '\n') {
-                dico->L[j] = j;
+                dico->L[j] = j+1;
                 j++;
             }
         }

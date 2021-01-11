@@ -45,16 +45,20 @@ ARBRE creer_arbre(char *mot, ARBRE droite, ARBRE gauche) {
     ARBRE A = malloc(sizeof(struct noeud));
 
     A->nbOcurrenceMot = 1;
+    //A->ligne[0] = *ligne;
+
     A->motArbre = mot;
     A->droite = droite;
     A->gauche = gauche;
 
+    //liberer_mot(mot)
     return A;
 }
 
 char *recup_mot(char *argv, int *position, char *mot)   {
     //mot = malloc(MOT_LE_PLUS_LONG * sizeof(char *));
     //mot = NULL;
+
     int i = 0;
     FILE *texte = NULL;
     texte = fopen(argv, "r");
@@ -65,6 +69,12 @@ char *recup_mot(char *argv, int *position, char *mot)   {
     else    {
         for (int i = 0; i < *position; i++)  {
             fscanf(texte, "%s", mot);
+
+            /*fscanf(texte, "%[0-9A-Za-z]s", mot);
+            if (fgetc(texte) == '\n')   {
+                *ligne = *ligne + 1;
+            }*/
+
         }
 	}
 
@@ -82,10 +92,10 @@ int compare(ARBRE A, char *mot) {
     if (strcoll(A->motArbre, mot) == 0)    {
         return 0;
     }
-    else if ((strcoll(A->motArbre, mot) < 0))    {
+    else if ((strcoll(A->motArbre, mot) > 0))    {
         return 1;
     }
-    else if (strcoll(A->motArbre, mot) > 0) {
+    else if (strcoll(A->motArbre, mot) < 0) {
         return 2;
     }
     else    {
@@ -103,8 +113,14 @@ ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBR
         return creer_arbre(mot, NULL, NULL);
     }
     else    {
+
+        /*while (desequilibre(A) != -1 || desequilibre(A) != 0 || desequilibre(A) != 1)  {
+            A = equilibre(A);
+        }*/
+
         switch(compare(A, mot)) {
             case 0:
+                //A->ligne[A->nbOcurrenceMot] = *ligne;
                 A->nbOcurrenceMot++;
                 motSuivant = true;
                 break;
@@ -156,26 +172,21 @@ int desequilibre(ARBRE A)   {
 }
 
 ARBRE rotation_droite(ARBRE A) {
-    ARBRE C = malloc(sizeof(struct noeud));
 
-    C = A;
+    ARBRE C = A;
     A = A->gauche;
-    A->droite = C->gauche;
-    C = A->droite;
+    C->gauche = A->droite;
+    A->droite = C;
 
-    liberer_arbre(C);
     return A;
 }
 
 ARBRE rotation_gauche(ARBRE A) {
-    ARBRE C = malloc(sizeof(struct noeud));
-
-    C = A;
+    ARBRE C = A;
     A = A->droite;
-    A->gauche = C->droite;
-    C = A->gauche;
+    C->droite = A->gauche;
+    A->gauche = C;
 
-    liberer_arbre(C);
     return A;
 }
 
@@ -183,22 +194,33 @@ ARBRE equilibre(ARBRE A)    {
     if (desequilibre(A) == 2)   {
         if (desequilibre(A->gauche) == 1 || desequilibre(A->gauche) == 0) {
             A = rotation_droite(A);
+            return A;
         }
         else    {
             A->gauche = rotation_gauche(A->gauche);
             A = rotation_droite(A);
+            return A;
         }
     } 
     else if (desequilibre(A) == -2)   {
         if (desequilibre(A->droite) == 0 || desequilibre(A->droite) == -1)  {
             A = rotation_gauche(A);
+            return A;
         }
         else    {
             A->droite = rotation_droite(A->droite);
             A = rotation_gauche(A);
+            return A;
         }
     }
+    return A;
+}
 
+ARBRE requilibre(ARBRE A)   {
+    while (A->gauche != NULL && A->droite != NULL)  {
+        A = requilibre(A->droite);
+        A = requilibre(A->gauche);
+    }
     return A;
 }
 

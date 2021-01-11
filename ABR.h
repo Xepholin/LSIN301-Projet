@@ -1,6 +1,7 @@
 struct noeud    {
     char *motArbre;
     int nbOcurrenceMot;
+    int *ligne;
     int hauteurD;
     int hauteurG;
     struct noeud *droite;
@@ -21,7 +22,7 @@ char *recup_mot(char *argv, int *position, char *mot);
 
 int compare (ARBRE A, char *mot);
 
-ARBRE ajoute_element(char *argv, int *position, char *mot,  bool motSuivant, ARBRE A);
+ARBRE ajoute_element(char *argv, int *position, char *mot, bool motSuivant, ARBRE A);
 
 int hauteur_sous_arbre(ARBRE A);
 
@@ -34,6 +35,8 @@ ARBRE rotation_droite(ARBRE A);
 ARBRE rotation_gauche(ARBRE A);
 
 ARBRE equilibre(ARBRE A);
+
+ARBRE requilibre(ARBRE A);
 
 void affiche_arbre(ARBRE A);
 
